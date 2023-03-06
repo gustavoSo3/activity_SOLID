@@ -1,15 +1,23 @@
 from pymongo import MongoClient
 from unittest import result
 
-client = pymongo.MongoClient("mongodb+srv://admin:root@cluster0.muthfez.mongodb.net/?retryWrites=true&w=majority")
-# db = client['testStore']
-db = client.test
-collection = db['productos']
+from activity_SOLID.producto import Producto
 
-# collection.insert_one({"_id": 1,
-#                       "name": "Gansito",
-#                       "precio": 20})
 
-results = collection.find()
-for r in result:
-    print(r)
+class MongoDB:
+    def __init__(self) -> None:
+        self.client = MongoClient("mongodb+srv://admin:root@cluster0.muthfez.mongodb.net/?retryWrites=true&w=majority")
+        self.db = self.client["Solid"]
+        self.collection = self.db["Productos"]
+
+    def insetar(self, producto:Producto) -> None:
+        self.collection.insert_one({"id": producto.id, "name": producto.nombre, "precio": producto.precio, "cantidad": producto.cantidad})
+
+    def actulizar(self, producto:Producto) -> None:
+        result = self.collection.find(producto.id)
+        self.collection.update_one(result)
+
+    def delete(self, producto:Producto) -> None:
+        result = self.collection.find(producto.id)
+        self.collection.delete_one(result)
+
