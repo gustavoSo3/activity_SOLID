@@ -6,7 +6,7 @@ from sql import SQL
 
 
 if __name__ == "__main__":
-    
+
     #sql_connection = SQL()
     mongo_connection = MongoDB()
 
