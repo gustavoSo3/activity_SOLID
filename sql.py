@@ -13,7 +13,7 @@ class SQL(Database):
         print("Insertar nuevo registro")
         self.cursor.execute("INSERT INTO PRODUCTOS (nombre, precio, cantidad) VALUES (" +
                             producto.nombre+", "+producto.precio+", "+producto.cantidad+")")
-        print("Insert correcto")
+        print("SQL: Insert correcto")
 
 
     def actualizar(self, id : int, producto: Producto) -> None:
@@ -23,12 +23,12 @@ class SQL(Database):
             ", cantidad ="+producto.cantidad+
             ", precio ="+producto.precio+
             " WHERE id ="+producto.id)
-        print("Registro actualizado")
+        print("SQL: Registro actualizado")
 
     def eliminar(self, id: int) -> None:
         print("Eliminar registro")
         self.cursor.execute("DELETE FROM PRODUCTOS WHERE id ="+id)
-        print("Registro borrado")
+        print("SQL: Registro borrado")
 
     def abrir(self) -> None:
         self.abrir_sql = psycopg2.connect(
@@ -38,8 +38,10 @@ class SQL(Database):
             password=""
         )
         self.cursor = self.abrir_sql.cursor()
+        print("SQL: connectado")
 
     def cerrar(self) -> None:
         """Closes the database connection"""
         self.abrir_sql.close()
+        print("SQL: Connecion cerrada")
         

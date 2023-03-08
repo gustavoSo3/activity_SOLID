@@ -19,6 +19,7 @@ class MongoDB(Database):
                 "cantidad": producto.cantidad
             }
         )
+        print("Mongo: Insert correcto")
 
     def actulizar(self, id:int, producto: Producto) -> None:
         """Actualizar en mongo DB"""
@@ -28,10 +29,12 @@ class MongoDB(Database):
                 "precio": producto.precio,
                 "cantidad": producto.cantidad
             })
+        print("Mongo: Registro actualizado")
 
     def eliminar(self, id: int) -> None:
         """Eliminar en mongoDB"""
         self.collection.delete_one({"id" : id})
+        print("Mongo: Producto eliminado")
 
     def abrir(self) -> None:
         self.client = MongoClient(
@@ -39,6 +42,8 @@ class MongoDB(Database):
         )
         self.db = self.client["Solid"]
         self.collection = self.db["Productos"]
+        print("Mongo: connectado")
 
     def cerrar(self) -> None:
         self.client.close()
+        print("Mongo: desconectado")
