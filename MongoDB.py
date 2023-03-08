@@ -9,7 +9,7 @@ from producto import Producto
 class MongoDB(Database):
     """Connection to MongoDB"""
 
-    def insetar(self, producto:Producto) -> None:
+    def insertar(self, producto:Producto) -> None:
         """Insert in mongoDB"""
         self.collection.insert_one(
             {
