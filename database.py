@@ -8,10 +8,10 @@ class Database(ABC):
     def insertar(self, producto : Producto) -> None:
         """Método para insertar en la base de datos"""
 
-    def actualizar(self, id : str, producto : Producto) -> None:
+    def actualizar(self, id : int, producto : Producto) -> None:
         """Método para actualizar en la base de datos"""
 
-    def eliminar(self, id : str) -> None:
+    def eliminar(self, id : int) -> None:
         """Método para eliminar en la base de datos"""
 
     def abrir(self) -> None:

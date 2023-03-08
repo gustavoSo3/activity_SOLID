@@ -1,68 +1,45 @@
+"""SQL Database connection"""
 import psycopg2
 
-from activity_SOLID.producto import Producto
+from database import Database
+
+from producto import Producto
 
 
-class SQL():
+class SQL(Database):
+    """SQL Database Connection"""
 
-    def __init__(self) -> None:
-        self.abrirSQL = psycopg2.connect(
-            host='ec2-52-204-195-2.compute-1.amazonaws.com', database='products', user='', password='')
-        self.cursor = self.abrirSQL.cursor()
-
-    # Consultas
-
-    # insertar()
     def insertar(self, producto: Producto) -> None:
-        print('Insertar nuevo registro')
-        producto.nombre: str = input('Ingresa el nombre del producto:')
-        producto.precio: float = input('Ingresa el precio del producto:')
-        producto.cantidad: int = input('Ingresa el precio del producto:')
+        print("Insertar nuevo registro")
+        self.cursor.execute("INSERT INTO PRODUCTOS (nombre, precio, cantidad) VALUES (" +
+                            producto.nombre+", "+producto.precio+", "+producto.cantidad+")")
+        print("Insert correcto")
 
-        self.cursor.execute('INSERT INTO PRODUCTOS (nombre, precio, cantidad) VALUES (' +
-                            producto.nombre+', '+producto.precio+', '+producto.cantidad+')')
-        print('Insert correcto')
 
-    # actualizar()
+    def actualizar(self, id : int, producto: Producto) -> None:
+        print("Actualizar registro")
+        self.cursor.execute(
+            "UPDATE PRODUCTOS SET nombre = "+producto.nombre+
+            ", cantidad ="+producto.cantidad+
+            ", precio ="+producto.precio+
+            " WHERE id ="+producto.id)
+        print("Registro actualizado")
 
-    def actualizar(self, producto: Producto) -> None:
-        print('Actualizar registro')
-        print('Qué desea cambiar?')
-        print('[1] - Nombre')
-        print('[2] - Precio')
-        print('[3] - Cantidad')
-        opc: str = input()
+    def eliminar(self, id: int) -> None:
+        print("Eliminar registro")
+        self.cursor.execute("DELETE FROM PRODUCTOS WHERE id ="+id)
+        print("Registro borrado")
 
-        producto.nombre: str = input(
-            'Ingresa el nombre del producto a actualizar: ')
-        producto.id: int = self.cursor.execute(
-            'SELECT id FROM PRODUCTOS WHERE nombre LIKE '+producto.nombre+'')
+    def abrir(self) -> None:
+        self.abrir_sql = psycopg2.connect(
+            host="ec2-52-204-195-2.compute-1.amazonaws.com",
+            database="products",
+            user="",
+            password=""
+        )
+        self.cursor = self.abrir_sql.cursor()
 
-        match opc:
-            case '1':
-                nuevoNombre: str = input('Ingresa el nuevo nombre: ')
-                self.cursor.execute(
-                    'UPDATE PRODUCTOS SET nombre = '+nuevoNombre+' WHERE id ='+producto.id)
-
-            case '2':
-                nuevoPrecio: float = input('Ingresa el nuevo precio: ')
-                self.cursor.execute(
-                    'UPDATE PRODUCTOS SET precio = '+nuevoPrecio+' WHERE id ='+producto.id)
-
-            case '3':
-                nuevaCant: int = input('Ingresa la nueva cantidad: ')
-                self.cursor.execute(
-                    'UPDATE PRODUCTOS SET nombre = '+nuevaCant+' WHERE id ='+producto.id)
-
-        print('Registro actualizado')
-
-    # eliminar()
-    def eliminar(self, producto: Producto) -> None:
-        print('Eliminar registro')
-        producto.nombre: str = input(
-            'Ingresa el nombre del producto a borrar: ')
-        producto.id: int = self.cursor.execute(
-            'SELECT id FROM PRODUCTOS WHERE nombre LIKE '+producto.nombre+'')
-        self.cursor.execute('DELETE FROM PRODUCTOS WHERE id ='+producto.id)
-
-        print('Registro borrado')
+    def cerrar(self) -> None:
+        """Closes the database connection"""
+        self.abrir_sql.close()
+        
